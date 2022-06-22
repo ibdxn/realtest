@@ -181,98 +181,72 @@ export const postEdit = async (req, res) => {
 
     const {
         session: {
-            user: { _id, email: sessionEmail, username: sessionUserName, },
+            user: { _id, avatarUrl, email: sessionEmail, username: sessionUserName, },
         },
-        body: { name, email, username, location } ,file,
-    } = req; 
+        body: { name, email, username, location }, file,
+    } = req;
 
+    async function editOK() {
 
-
-     if ( email != sessionEmail || username != sessionUserName ) {
-        //console.log(sessionEmail);
-        //console.log(email);
-
-        //req.session.user.email = email;
-        //req.session.user.username = username;
-
-        if ( email === sessionEmail ) {
-
-            const exists =  User.exists({
-                _id: { $ne: { _id } },
-                $or: [{ username }],
-              });
-        
-            console.log(username);
-            console.log(User.exists);
-        //console.log(User.email);
-        
-       // const user = await User.findById(_id);
-        //user.password = newPassword;
-        if (exists) {
-            return res.status(400).render("edit-profile", {
-                pageTitle: "Edit Profile",
-                errorMessage: "This username is already taken",
-            });
-        }
-    
-        else {
+        try {
 
             const updatedUser = await User.findByIdAndUpdate(_id, {
+                avatarUrl: file ? file.path : avatarUrl,
                 name,
                 email,
                 username,
                 location,
-            },file, { new: true });
-    
+            }, { new: true });
+
             req.session.user = updatedUser;
             return res.redirect("/users/edit");
-    
-        }      
-}
 
-if ( username === sessionUserName ) {
+        } catch (error) {
+            return res.status(400).render("edit-profile", { pageTitle: "Edit Profile", errorMessage: error._message, });
+
+        };
+
+    };
 
 
-    const exists =  User.exists({   //_id: { $ne: { _id } },
-        $or: [ {email}  ] });
+    if (email != sessionEmail || username != sessionUserName) {
 
-    //console.log(User.email);
-    
-    if (exists) {
-        return res.status(400).render("edit-profile", {
-            pageTitle: "Edit Profile",
-            errorMessage: "This email is already taken",
-        });
-    }
+        if (email != sessionEmail && username != sessionUserName) {
+            editOK();
+        }
+        if (email === sessionEmail) {
 
-    else {
+            const exists = await User.exists({ username });
 
-        const updatedUser = await User.findByIdAndUpdate(_id, {
-            name,
-            email,
-            username,
-            location,
-        },file, { new: true });
+            if (exists) {
+                return res.status(400).render("edit-profile", {
+                    pageTitle: "Edit Profile",
+                    errorMessage: "This username is already taken",
+                });
+            }
+            else {
+                editOK();
+            }
+        }
 
-        req.session.user = updatedUser;
-        return res.redirect("/users/edit");
+        if (username === sessionUserName) {
 
-    }      
-}
+            const exists = await User.exists({ email });
+
+            if (exists) {
+                return res.status(400).render("edit-profile", {
+                    pageTitle: "Edit Profile",
+                    errorMessage: "This email is already taken",
+                });
+            }
+            else {
+                editOK();
+            }
+        }
 
 
     } else {
-
-        const updatedUser = await User.findByIdAndUpdate(_id, {
-            name,
-            email,
-            username,
-            location,
-        }, { new: true });
-
-        req.session.user = updatedUser;
-        return res.redirect("/users/edit");
-
+        editOK();
     }
 
 };
@@ -283,8 +257,8 @@ export const getChangePassword = (req, res) => {
     if (req.session.user.socialOnly === true) {
         return res.redirect("/");
     }
-    return res.render("users/change-password", { pageTitle: "Change Password"});
- 
+    return res.render("users/change-password", { pageTitle: "Change Password" });
+
 };
 
 export const postChangePassword = async (req, res) => {
@@ -295,16 +269,16 @@ export const postChangePassword = async (req, res) => {
         },
         body: { oldPassword, newPassword, newPasswordConfirmation },
     } = req;
-    
+
     const ok = await bcrypt.compare(oldPassword, password);
 
-    if(!ok) {
+    if (!ok) {
         return res.status(400).render("users/change-password", {
             pageTitle: "Change Password",
             errorMessage: "The current password is incorrect",
         });
     }
-    if (newPassword !== newPasswordConfirmation){
+    if (newPassword !== newPasswordConfirmation) {
 
         return res.status(400).render("users/change-password", {
             pageTitle: "Change Password",
