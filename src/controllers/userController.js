@@ -208,42 +208,46 @@ export const postEdit = async (req, res) => {
 
     };
 
+    function acceptToEdit(checking) {
+
+        const exists = await User.exists({ checking });
+
+        if (exists) {
+            return res.status(400).render("edit-profile", {
+                pageTitle: "Edit Profile",
+                errorMessage: "This" + checking + "already taken",
+            });
+        }
+        else {
+            editOK();
+        }
+
+    }
+
 
     if (email != sessionEmail || username != sessionUserName) {
 
-        if (email != sessionEmail && username != sessionUserName) {
-            editOK();
-        }
         if (email === sessionEmail) {
+            acceptToEdit(username)
+        }
 
-            const exists = await User.exists({ username });
+        else if (username === sessionUserName) {
+            acceptToEdit(email)
+        }
 
+        else {
+            const exists = await User.exists({ $or: [{ username }, { email }] });
             if (exists) {
                 return res.status(400).render("edit-profile", {
                     pageTitle: "Edit Profile",
-                    errorMessage: "This username is already taken",
+                    errorMessage: "This email/username is already taken",
                 });
             }
             else {
                 editOK();
             }
+
         }
-
-        if (username === sessionUserName) {
-
-            const exists = await User.exists({ email });
-
-            if (exists) {
-                return res.status(400).render("edit-profile", {
-                    pageTitle: "Edit Profile",
-                    errorMessage: "This email is already taken",
-                });
-            }
-            else {
-                editOK();
-            }
-        }
-
 
     } else {
         editOK();
