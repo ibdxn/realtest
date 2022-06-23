@@ -208,14 +208,14 @@ export const postEdit = async (req, res) => {
 
     };
 
-    function acceptToEdit(checking) {
+    async function acceptToEdit(checking) {
 
         const exists = await User.exists({ checking });
 
         if (exists) {
             return res.status(400).render("edit-profile", {
                 pageTitle: "Edit Profile",
-                errorMessage: "This" + checking + "already taken",
+                errorMessage: checking + " is already taken",
             });
         }
         else {
@@ -238,10 +238,26 @@ export const postEdit = async (req, res) => {
         else {
             const exists = await User.exists({ $or: [{ username }, { email }] });
             if (exists) {
-                return res.status(400).render("edit-profile", {
-                    pageTitle: "Edit Profile",
-                    errorMessage: "This email/username is already taken",
-                });
+
+                const emailExists = await User.exists({ email });
+                if (emailExists) {
+
+                    return res.status(400).render("edit-profile", {
+                        pageTitle: "Edit Profile",
+                        errorMessage: email + " is already taken",
+                    });
+
+                }
+                else {
+
+                    return res.status(400).render("edit-profile", {
+                        pageTitle: "Edit Profile",
+                        errorMessage: username + " is already taken",
+
+                    });
+
+                }
+
             }
             else {
                 editOK();
