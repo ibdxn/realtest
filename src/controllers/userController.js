@@ -121,8 +121,6 @@ export const finishGithubLogin = async (req, res) => {
             })
         ).json();
 
-        console.log(userData);
-
         const emailData = await (
             await fetch(`${apiUrl}/user/emails`, {
                 headers: {
@@ -134,7 +132,6 @@ export const finishGithubLogin = async (req, res) => {
 
         ).json();
 
-        console.log(emailData);
 
         const emailObj = emailData.find(
             (email) => email.primary === true && email.verified === true
@@ -143,9 +140,11 @@ export const finishGithubLogin = async (req, res) => {
         if (!emailObj) {
             return res.redirect("/login");
         }
+
+
         let user = await User.findOne({ email: emailObj.email });
         if (!user) {
-            await User.create({
+            user = await User.create({
 
                 avatarUrl: userData.avatar_url,
                 name: userData.name,
@@ -154,11 +153,15 @@ export const finishGithubLogin = async (req, res) => {
                 password: "",
                 socialOnly: true,
                 location: userData.location,
+
             });
+
+            req.session.loggedIn = true;
+            req.session.user = user; 
+            return res.redirect("/");
         }
         req.session.loggedIn = true;
         req.session.user = user; 
-        console.log(user);
         return res.redirect("/");
 
     } else {
@@ -200,7 +203,7 @@ export const postEdit = async (req, res) => {
                 email,
                 username,
                 location,
-            }, { new: true });
+            }, { new: true }, );
 
             req.session.user = updatedUser;
             return res.redirect("/users/edit");
