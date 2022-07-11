@@ -112,6 +112,24 @@ const handleMouseLeave = () => {
 
 };
 
+const playCheck = () => {
+  if (video.paused) {
+    video.play();
+  } else {
+    video.pause();
+  }
+};
+
+const spacePlayCheck = (e) => {
+
+  if(e.keyCode === 32)
+  {
+    playCheck();
+  }
+
+};
+
+
 
 
 playBtn.addEventListener("click", handlePlayClick);
@@ -119,6 +137,8 @@ muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolumeChange);
 video.addEventListener("loadeddata", handleLoadedMetadata);
 video.addEventListener("timeupdate", handleTimeUpdate);
+video.addEventListener("click", playCheck);
+document.addEventListener("keydown", spacePlayCheck);
 videoContainer.addEventListener("mousemove", handleMouseMove);
 videoContainer.addEventListener("mouseleave", handleMouseLeave);
 timeline.addEventListener("input", handleTimelineChange);
