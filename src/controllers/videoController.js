@@ -55,6 +55,8 @@ if(!video) {
 }
 
 if(String(video.owner) !== String(_id)){
+    req.flash("error", "Not authorized");
+
     return res.status(403).redirect("/");
 }
 
@@ -116,6 +118,8 @@ export const postUpload = async(req, res) => {
         return res.render("404", {pageTitle:"Video Not Found"});
     }
     if(String(video.owner) !== String(_id)){
+        req.flash("error", "You are not the owner of the video.");
+
         return res.status(403).redirect("/");
     }
      await Video.findByIdAndDelete(id);
