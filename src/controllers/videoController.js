@@ -55,7 +55,7 @@ if(!video) {
 }
 
 if(String(video.owner) !== String(_id)){
-    req.flash("error", "Not authorized");
+    req.flash("error", "You ar not the owner of the video.");
 
     return res.status(403).redirect("/");
 }
@@ -67,7 +67,8 @@ if(String(video.owner) !== String(_id)){
     
 } , { new: true }, );
 
-return res.redirect("/");
+req.flash("success", "Changes saved");
+return res.redirect(`/videos/${id}`);
 
 };
 
