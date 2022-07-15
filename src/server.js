@@ -20,6 +20,12 @@ app.set("view engine",  "pug");
 app.set("views", process.cwd() + "/src/views");
 app.use(logger);
 app.use(express.urlencoded({extended: true}));
+//- form으로부터 오는 data를 server가이해할수 있도록함
+app.use(express.text());
+//- server가 웹사이트 req로 들어오는 text를 이해하도록 함
+app.use(express.json());
+//- stringfy로 변환된걸 json(ex.js obj)으로 다시 변환 
+//-  *commentSection.js/handleSubmit
 app.use(session({
     secret: process.env.COOKIE_SECRET, 
     resave: false,
