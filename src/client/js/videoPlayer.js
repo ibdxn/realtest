@@ -11,6 +11,7 @@ const fullScreenBtn = document.getElementById("fullScreen");
 const fullScreenIcon = fullScreenBtn.querySelector("i");
 const videoContainer = document.getElementById("videoContainer");
 const videoControls = document.getElementById("videoControls");
+const commentForm = document.getElementById("commentForm")
 
 let controlsTimeout = null;
 let controlsMovementTimeout = null;
@@ -121,11 +122,11 @@ const playCheck = () => {
 };
 
 const spacePlayCheck = (e) => {
+  
+  if (e.target === document.body && e.code === "Space") {
+     playCheck();
 
-  if(e.keyCode === 32)
-  {
-    playCheck();
-  }
+    }
 
 };
 
