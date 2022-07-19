@@ -7,7 +7,7 @@ block content
                 span#play.videoControls__playBtn
                     i.fas.fa-play
                 div.videoControls__time
-                    span#currenTime 00:00
+                    span#currenTime 00:00,
                     span  / 
                     span#totalTime 00:00
             input(type="range",step="1", value="0", min="0")#timeline.videoControls__timeline
@@ -36,12 +36,15 @@ block content
                 button Add Comment
     div.video__comments 
         ul 
-            each comment in video.comments.reverse()
-                li.video__comment(data-id=comment.id)
+            each comment in video.comments.reverse()            
+                li#commentList.video__comment(data-id=comment.id)
                     i.fas.fa-comment
                     span  #{comment.text}
+                    if String(video.owner._id) === String(loggedInUser._id)
+                        span#xBtn  ❌
 
-block scripts
+            
+block scripts 
     script(src="/static/js/videoPlayer.js")  
     if loggedIn
         script(src="/static/js/commentSection.js")                

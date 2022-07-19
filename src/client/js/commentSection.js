@@ -1,8 +1,9 @@
 import { async } from "regenerator-runtime";
 
 const videoContainer = document.getElementById("videoContainer");
+const commentList = document.getElementById("commentList");
 const form = document.getElementById("commentForm");
-
+const xBtns = document.querySelectorAll("#xBtn");
 
 const addComment = (text, id) => {
     const videoComments = document.querySelector(".video__comments ul");
@@ -11,20 +12,21 @@ const addComment = (text, id) => {
     newComment.className = "video__comment";
     const icon = document.createElement("i");
     icon.className = "fas fa-comment";
-    const span = document.createElement("span")
+    const span = document.createElement("span");
     span.innerText = ` ${text}`;
     const span2 = document.createElement("span");
-    span.innerText = "❌"
+    span2.innerText = "❌";
     newComment.appendChild(icon);
-    newComment.appendChild(span); 
-    newComment.appendChild(span2); 
-    videoComments.prepend(newComment); 
+    newComment.appendChild(span);
+    newComment.appendChild(span2);
+    videoComments.prepend(newComment);
+};
 
-}
+
 
 const handleSubmit = async (event) => {
-
     event.preventDefault();
+
     const textarea = form.querySelector("textarea");
     const text = textarea.value;
     const videoId = videoContainer.dataset.id;
@@ -35,28 +37,49 @@ const handleSubmit = async (event) => {
         method: "POST",
         headers: { //- header = 기본적으로 fetch로 정보 보낼때
             //- req에 추가할수 있는 정보
-            //- 우리가 backenddprp json 보낸다고 알려주는 의미
+            //- 우리가 backend에게 json 보낸다고 알려주는 의미
             "Content-Type": "application/json",
         },
         body:
             JSON.stringify({ text }),
 
     });
-    if(response.status === 201) {
-        
+
+    if (response.status === 201) {
+
         textarea.value = "";
-        const {newCommentId} = await response.json(); 
+        const { newCommentId } = await response.json();
         addComment(text, newCommentId);
-     }
+    }
+
+};
+
+const handleDeleteClick = async (event) => {
+
+    const commentId = commentList.dataset.id;
+    const response = fetch(`/api/comments/${commentId}/delete`, {
+        method: "DELETE",
+    });
+
+    event.target.parentNode.remove();
 
 };
 
 if (form) {
-    form.addEventListener("submit", handleSubmit)
 
-}
+    form.addEventListener("submit", handleSubmit);
+
+};
+
+xBtns.forEach(xBtn => {
+
+    xBtn.addEventListener("click", handleDeleteClick);
+
+});
+
 
 /*
+
 challenge
 
 1st check 댓글 작성자만 엑스버튼 보이게하기
@@ -72,5 +95,7 @@ eventlistner // delete req //
 handleEnded ref
 
 2nd check 사용자가 그댓글 작성자 맞는지 확인(deletevideo ref)
+
+
 
 */

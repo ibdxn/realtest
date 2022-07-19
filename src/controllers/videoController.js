@@ -189,3 +189,23 @@ export const postUpload = async(req, res) => {
 
     return res.status(201).json({newCommentId: comment._id}) ; 
  };
+
+ export const deleteComment = async(req, res) => {
+
+    const { id } = req.params;
+    const {
+       user: { _id },
+   } = req.session;
+   const comment = await Comment.findById(id);
+
+   if(!comment) {
+       return res.render("404", {pageTitle:"Comment Not Found"});
+   }
+   if(String(comment.owner) !== String(_id)){
+       req.flash("error", "You are not the owner of the comment.");
+
+       return res.status(403).redirect("/");
+   }
+    await Comment.findByIdAndDelete(id);
+    return res.status(200);   
+ };
