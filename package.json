@@ -4,7 +4,7 @@
   "description": "The best way to watch a videos.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ibdxn/realtest.git"
+    "url": "git+https://github.com/ibdxn/wetube-project.git"
   },
   "scripts": {
     "start": "node build/init.js",
@@ -17,9 +17,9 @@
   "author": "Doyeon",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ibdxn/realtest/issues"
+    "url": "https://github.com/ibdxn/wetube-project/issues"
   },
-  "homepage": "https://github.com/ibdxn/realtest#readme",
+  "homepage": "https://github.com/ibdxn/wetube-project#readme",
   "dependencies": {
     "@ffmpeg/core": "^0.10.0",
     "@ffmpeg/ffmpeg": "^0.10.1",
