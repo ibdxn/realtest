@@ -13,6 +13,7 @@ const s3 = new aws.S3({
 const multerUploader = multerS3({
     s3: s3,
     bucket: 'wetube-doyeon',
+    acl: "public-read",
 
 });
 
