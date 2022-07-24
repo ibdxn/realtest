@@ -84,7 +84,7 @@ export const postUpload = async(req, res) => {
     const {
         user:{_id},
     } = req.session;
-    const {video} = req.file; 
+    const {video} = req.files; 
     const { title, description, hashtags } =req.body;
     try {
 
