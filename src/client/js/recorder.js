@@ -1,4 +1,5 @@
 import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
+corePath: "https://unpkg.com/@ffmpeg/core@0.8.5/dist/ffmpeg-core.js";
 const actionBtn = document.getElementById("actionBtn");
 const video = document.getElementById("preview");
 
@@ -87,7 +88,7 @@ const handleStart = () => {
   recorder.start();
   setTimeout(() => {
     recorder.stop();
-  }, 5000);
+  }, 3000);
 };
 
 const init = async () => {
