@@ -1,7 +1,6 @@
 import Video from "../models/Video";
 import Comment from "../models/Comment";
 import User from "../models/User";
-import { async } from "regenerator-runtime";
 
 export const home = async(req, res) =>{
     
@@ -84,14 +83,15 @@ export const postUpload = async(req, res) => {
     const {
         user:{_id},
     } = req.session;
-    const {video} = req.files; 
+    const {location} = req.file; 
+    console.log(req.file);
     const { title, description, hashtags } =req.body;
     try {
 
         const newVideo = await Video.create({
         title,
         description,
-        fileUrl: video[0].location,
+        fileUrl: location,
         owner: _id,
         hashtags: Video.formatHashtags(hashtags),
        
@@ -103,8 +103,8 @@ export const postUpload = async(req, res) => {
 
     return res.redirect("/");
     } catch(error) {
-    return res.status(400).render("upload", {pageTitle: "Upload Video", errorMessage: error._message,});
-        
+    //return res.status(400).render("upload", {pageTitle: "Upload Video", errorMessage: error._message,});
+        console.log(error);
     }
 
 };
