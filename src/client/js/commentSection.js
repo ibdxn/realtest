@@ -55,13 +55,14 @@ const handleSubmit = async (event) => {
 };
 
 const handleDeleteClick = async (event) => {
-
+    event.preventDefault();
+    
+    event.target.parentNode.remove();
     const commentId = commentList.dataset.id;
     const response = await fetch(`/api/comments/${commentId}/delete`, {
         method: "DELETE",
     });
 
-    event.target.parentNode.remove();
 
 };
 
