@@ -1,6 +1,6 @@
 extends base
 block content
-    div#videoContainer(data-id=video._id)
+    div#videoContainer(data-id=video._id, crossorigin)
         video(src=video.fileUrl)
         div#videoControls.videoControls
             div.videoControls__play
