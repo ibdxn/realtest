@@ -19,13 +19,18 @@ app.use(flash());
 app.set("view engine",  "pug");
 app.set("views", process.cwd() + "/src/views");
 app.use((req, res, next) => {
+    res.header("Cross-Origin-Embedder-Policy", "require-corp");
+    res.header("Cross-Origin-Opener-Policy", "same-origin");
+    next();
+    });
+/* app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
     );
     next();
-    });
+    }); */
 app.use(logger);
 app.use(express.urlencoded({extended: true}));
 //- form으로부터 오는 data를 server가이해할수 있도록함
