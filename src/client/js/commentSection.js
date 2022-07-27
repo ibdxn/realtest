@@ -5,6 +5,14 @@ const commentList = document.getElementById("commentList");
 const form = document.getElementById("commentForm");
 const xBtns = document.querySelectorAll("#xBtn");
 
+const deleteComment = (commentId) => {
+    const selectedList = document.querySelector(
+      `li.video__comment[data-id='${commentId}']`
+    );
+    selectedList.remove();
+  };
+  
+
 const addComment = (text, id) => {
     const videoComments = document.querySelector(".video__comments ul");
     const newComment = document.createElement("li");
@@ -55,14 +63,16 @@ const handleSubmit = async (event) => {
 };
 
 const handleDeleteClick = async (event) => {
-    event.preventDefault();
     
-    event.target.parentNode.remove();
     const commentId = commentList.dataset.id;
     const response = await fetch(`/api/comments/${commentId}/delete`, {
         method: "DELETE",
     });
-
+    
+    if (response.status === 200) {
+        console.log("yah DeleteComplete");
+        deleteComment(commentId);
+      }
 
 };
 
