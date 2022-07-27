@@ -25,7 +25,7 @@ header
                                 if loggedInUser.avatarUrl[0]==="h"
                                     img.header__avatar(src= loggedInUser.avatarUrl, crossorigin ).avatar
                                 else
-                                    img.header__avatar(src= "/"+loggedInUser.avatarUrl).avatar
+                                    img.header__avatar(src= "/"+loggedInUser.avatarUrl, crossorigin).avatar
             else
                 li
                     a(href="/login")  Login 
