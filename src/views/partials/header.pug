@@ -21,7 +21,6 @@ header
                         if !loggedInUser.avatarUrl
                             span 😀
                         else
-                            if loggedInUser.avatarUrl 
                             if loggedInUser.avatarUrl[0]==="h"
                                 img.header__avatar(src= loggedInUser.avatarUrl,crossorigin).avatar
                             else
