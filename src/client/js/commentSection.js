@@ -57,7 +57,7 @@ const handleSubmit = async (event) => {
 const handleDeleteClick = async (event) => {
 
     const commentId = commentList.dataset.id;
-    const response = fetch(`/api/comments/${commentId}/delete`, {
+    const response = await fetch(`/api/comments/${commentId}/delete`, {
         method: "DELETE",
     });
 
